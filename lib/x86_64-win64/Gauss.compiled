@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <Compiler Value="C:\lazarus\fpc\3.2.2\bin\x86_64-win64\fpc.exe" Date="1429736146"/>
+  <Params Value=" -MObjFPC -Scghi -O1 -gw2 -godwarfsets -gl -l -vewnhibq &quot;-FiD:\studia\II semestr\metody_numeryczne\projekt_macierze\lib\x86_64-win64&quot; &quot;-FuD:\studia\II semestr\metody_numeryczne\projekt_macierze\&quot; &quot;-FUD:\studia\II semestr\metody_numeryczne\projekt_macierze\lib\x86_64-win64\&quot; &quot;-FED:\studia\II semestr\metody_numeryczne\projekt_macierze\&quot; &quot;-oD:\studia\II semestr\metody_numeryczne\projekt_macierze\Gauss.exe&quot; Gauss.lpr"/>
+</CONFIG>

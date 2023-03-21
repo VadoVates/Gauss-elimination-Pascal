@@ -1,0 +1,1 @@
+# eliminacja_Gaussa
