@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <Compiler Value="C:\lazarus\fpc\3.2.2\bin\x86_64-win64\fpc.exe" Date="1429738194"/>
-  <Params Value=" -MObjFPC -Scghi -O1 -gw2 -godwarfsets -gl -l -vewnhibq -FiC:\Users\Marek\Documents\metody_numeryczne\eliminacja_Gaussa\lib\x86_64-win64 -FuC:\Users\Marek\Documents\metody_numeryczne\eliminacja_Gaussa\ -FUC:\Users\Marek\Documents\metody_numeryczne\eliminacja_Gaussa\lib\x86_64-win64\ -FEC:\Users\Marek\Documents\metody_numeryczne\eliminacja_Gaussa\ -oC:\Users\Marek\Documents\metody_numeryczne\eliminacja_Gaussa\Gauss.exe Gauss.lpr"/>
+  <Params Value=" -MObjFPC -Scghi -O1 -gw2 -godwarfsets -gl -l -vewnhibq -FiD:\studia\II_semestr\metody_numeryczne\eliminacja_Gaussa\lib\x86_64-win64 -FuD:\studia\II_semestr\metody_numeryczne\eliminacja_Gaussa\ -FUD:\studia\II_semestr\metody_numeryczne\eliminacja_Gaussa\lib\x86_64-win64\ -FED:\studia\II_semestr\metody_numeryczne\eliminacja_Gaussa\ -oD:\studia\II_semestr\metody_numeryczne\eliminacja_Gaussa\Gauss.exe Gauss.lpr"/>
 </CONFIG>

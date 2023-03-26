@@ -16,7 +16,7 @@ end;
 function EliminacjaGaussa (var macierz : tMacierz; ileNiewiadomych : word; eps : double;
                           var wektorX : tWektorDouble) : boolean;
 var
-  i, j, kolumna : word;
+  i, j, kolumna, k, l : word;
   mnoznik, suma : double;
 begin
   //petla for - tworzymy macierz trojkatna gorna
@@ -36,6 +36,16 @@ begin
       //dodawanie wiersza przemnozonego przez mnoznik
       for kolumna:=i to ileNiewiadomych do
       macierz[j][kolumna] := macierz [j][kolumna] + mnoznik * macierz[i][kolumna];
+
+      //kontrolne wypisanie
+      writeln ('Macierz AB:');
+      for k:=0 to ileNiewiadomych-1 do
+      begin
+        for l:=0 to ileNiewiadomych do
+        write (macierz[k][l]:8:3,' ');
+        writeln;
+      end;
+      //
     end;
   end;
 
@@ -89,50 +99,45 @@ end;
 function EliminacjaGaussaCrouta (var macierz : tMacierz; ileNiewiadomych : word; eps : double;
                           var wektorX : tWektorDouble; var wektorKolumna : tWektorIndeks) : boolean;
 var
-  i, j, kolumna : word;
+  i, j, kolumna, k, l : word;
   mnoznik, suma : double;
 begin
   //petla for - tworzymy macierz trojkatna gorna
   //do -2, bo nie potrzebujemy zerowac parametru przy ostatniej niewiadomej.
   for i:=0 to ileNiewiadomych-2 do
   begin
+    kolumna := i;
     for j:=i+1 to ileNiewiadomych-1 do
     begin
-      //jezeli przekatna ma ktorykolwiek element = 0, wtedy macierz jest osobliwa,
-      //zwracamy false i konczymy funkcje
-      if (Modul(macierz[i][i]) < eps) then
+      if (Modul(macierz[i][wektorKolumna[kolumna]]) < Modul(macierz[i][wektorKolumna[j]])) then
+         kolumna := j;
+    end;
+    j:=wektorKolumna[kolumna];
+    wektorKolumna[kolumna]:=wektorKolumna[i];
+    wektorKolumna[i]:=j;
+    for j:=i+1 to ileNiewiadomych-1 do
+    begin
+      if (Modul(macierz[i][wektorKolumna[i]]) < eps) then
       begin
         EliminacjaGaussaCrouta := false;
         Exit;
       end;
-      mnoznik := (macierz[j][i]/macierz[i][i])*(-1);
-      //dodawanie wiersza przemnozonego przez mnoznik
+      mnoznik:= (-1)*macierz[j][wektorKolumna[i]] / macierz [i][wektorKolumna[i]];
       for kolumna:=i to ileNiewiadomych do
-      macierz[j][kolumna] := macierz [j][kolumna] + mnoznik * macierz[i][kolumna];
+      begin
+        macierz[j][wektorKolumna[kolumna]]:=macierz[j][wektorKolumna[kolumna]] + mnoznik * macierz[i][wektorKolumna[kolumna]];
+      end;
+      //kontrolne wypisanie
+      writeln ('Macierz AB:');
+      for kolumna:=0 to ileNiewiadomych-1 do
+      begin
+        for l:=0 to ileNiewiadomych do
+        write (macierz[k][l]:8:3,' ');
+        writeln;
+      end;
+      //
     end;
   end;
-
-  //obliczanie x i wpisywanie wartosci x do wektora X
-  //od konca, bo macierz trojkatna gorna
-  for i:=(ileNiewiadomych-1) downto 0 do
-  begin
-    //suma jest rowna wyrazowi wolnemu
-    suma := macierz[i][ileNiewiadomych];
-    //j do i+1 po to, zeby petla nie wykonywala sie gdy wektorX jest pusty
-    for j:=(ileNiewiadomych-1) downto (i+1) do
-    begin
-      suma := suma - macierz[i][j] * wektorX[j];
-    end;
-    //jezeli przekatna ma ktorykolwiek element = 0, wtedy macierz jest osobliwa,
-    //zwracamy false i konczymy funkcje
-    if (Modul(macierz[i][i]) < eps) then
-    begin
-      EliminacjaGaussaCrouta := false;
-      Exit;
-    end;
-    wektorX[i]:=suma/macierz[i][i];
-  end;
-  EliminacjaGaussaCrouta := true;
 end;
 
 procedure GaussCrout (var macierzAB : tMacierz; ileNiewiadomych: word; eps : double);
