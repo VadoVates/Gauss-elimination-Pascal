@@ -9,21 +9,13 @@
         <Filename Value="Gauss.lpr"/>
         <IsPartOfProject Value="True"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="103"/>
-        <CursorPos X="21" Y="126"/>
-        <UsageCount Value="38"/>
+        <TopLine Value="142"/>
+        <CursorPos X="41" Y="156"/>
+        <UsageCount Value="39"/>
         <Loaded Value="True"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="Gauss.lpr"/>
-        <Caret Line="31" Column="11" TopLine="8"/>
-      </Position>
-      <Position>
-        <Filename Value="Gauss.lpr"/>
-        <Caret Line="83" Column="31" TopLine="64"/>
-      </Position>
       <Position>
         <Filename Value="Gauss.lpr"/>
         <Caret Line="11" Column="13"/>
@@ -135,6 +127,14 @@
       <Position>
         <Filename Value="Gauss.lpr"/>
         <Caret Line="132" Column="18" TopLine="113"/>
+      </Position>
+      <Position>
+        <Filename Value="Gauss.lpr"/>
+        <Caret Line="159" Column="8" TopLine="209"/>
+      </Position>
+      <Position>
+        <Filename Value="Gauss.lpr"/>
+        <Caret Line="144" Column="25" TopLine="135"/>
       </Position>
     </JumpHistory>
     <RunParams>

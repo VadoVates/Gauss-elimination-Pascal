@@ -13,7 +13,7 @@ begin
   Modul:=x;
 end;
 
-function EliminacjaGaussa (var macierz : tMacierz; ileNiewiadomych : word; eps : double;
+function EliminacjaGaussa (macierz : tMacierz; ileNiewiadomych : word; eps : double;
                           var wektorX : tWektorDouble) : boolean;
 var
   i, j, kolumna, k, l : word;
@@ -23,6 +23,7 @@ begin
   //do -2, bo nie potrzebujemy zerowac parametru przy ostatniej niewiadomej.
   for i:=0 to ileNiewiadomych-2 do
   begin
+    //od i+1, wiec schodzi wiersz nizej niz i, a indeks i tworzy "schodki"
     for j:=i+1 to ileNiewiadomych-1 do
     begin
       //jezeli przekatna ma ktorykolwiek element = 0, wtedy macierz jest osobliwa,
@@ -72,7 +73,7 @@ begin
   EliminacjaGaussa := true;
 end;
 
-procedure Gauss (var macierzAB : tMacierz; ileNiewiadomych: word; eps : double);
+procedure Gauss (macierzAB : tMacierz; ileNiewiadomych: word; eps : double);
 var
   wektorX : tWektorDouble;
   wektorKolumna : tWektorIndeks;
@@ -123,7 +124,7 @@ begin
         Exit;
       end;
       mnoznik:= (-1)*macierz[j][wektorKolumna[i]] / macierz [i][wektorKolumna[i]];
-      for kolumna:=i+1 to ileNiewiadomych do
+      for kolumna:=i to ileNiewiadomych do
       begin
         macierz[j][wektorKolumna[kolumna]]:=macierz[j][wektorKolumna[kolumna]] + mnoznik * macierz[i][wektorKolumna[kolumna]];
       end;
@@ -132,12 +133,29 @@ begin
       for kolumna:=0 to ileNiewiadomych-1 do
       begin
         for l:=0 to ileNiewiadomych do
-        write (macierz[k][l]:8:3,' ');
+        write (macierz[kolumna][l]:8:3,' ');
         writeln;
       end;
       //
     end;
   end;
+
+  //niewiadome
+  for i:=ileNiewiadomych-1 downto 0 do
+  begin
+    if (Modul(macierz[i][wektorKolumna[kolumna]])<eps) then
+    begin
+      EliminacjaGaussaCrouta:=false;
+      Exit;
+    end;
+    suma:= macierz [i][ileNiewiadomych];
+    for j:=ileNiewiadomych-1 downto i+1 do
+    begin
+      suma:= suma - macierz[i][wektorKolumna[j]]*wektorX[wektorKolumna[j]];
+    end;
+    wektorX[wektorKolumna[i]]:=suma/macierz[i][wektorKolumna[i]];
+  end;
+  EliminacjaGaussaCrouta := true;
 end;
 
 procedure GaussCrout (var macierzAB : tMacierz; ileNiewiadomych: word; eps : double);
@@ -197,8 +215,8 @@ var
   eps : double;
 begin
   CzytajDane (macierzAB, ileNiewiadomych, eps);
-  writeln ('Metoda eliminacji Gaussa:');
-  Gauss (macierzAB, ileNiewiadomych, eps);
+  //writeln ('Metoda eliminacji Gaussa:');
+  //Gauss (macierzAB, ileNiewiadomych, eps);
   writeln ('Metoda eliminacji Gaussa-Crouta:');
   GaussCrout (macierzAB, ileNiewiadomych, eps);
 end;
