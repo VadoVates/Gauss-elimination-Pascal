@@ -76,8 +76,7 @@ end;
 procedure Gauss (var macierzAB : tMacierz; ileNiewiadomych: word; eps : double);
 var
   wektorX : tWektorDouble;
-  wektorKolumna : tWektorIndeks;
-  i, j : word;
+  i : word;
 begin
   SetLength (wektorX,ileNiewiadomych);
 
@@ -100,7 +99,7 @@ end;
 function EliminacjaGaussaCrouta (var macierz : tMacierz; ileNiewiadomych : word; eps : double;
                           var wektorX : tWektorDouble; var wektorKolumna : tWektorIndeks) : boolean;
 var
-  i, j, kolumna, k, l : word;
+  i, j, kolumna, l : word;
   mnoznik, suma : double;
 begin
   //petla for - tworzymy macierz trojkatna gorna
@@ -136,10 +135,10 @@ begin
 
       //kontrolne wypisanie
       writeln ('Macierz AB:');
-      for kolumna:=0 to ileNiewiadomych-1 do
+      for l:=0 to ileNiewiadomych-1 do
       begin
-        for l:=0 to ileNiewiadomych do
-        write (macierz[kolumna][l]:8:3,' ');
+        for kolumna:=0 to ileNiewiadomych do
+        write (macierz[l][wektorKolumna[kolumna]]:8:3,' ');
         writeln;
       end;
       //
@@ -168,7 +167,7 @@ procedure GaussCrout (var macierzAB : tMacierz; ileNiewiadomych: word; eps : dou
 var
   wektorX : tWektorDouble;
   wektorKolumna : tWektorIndeks;
-  i, j : word;
+  i : word;
 begin
   SetLength (wektorX,ileNiewiadomych);
   SetLength (wektorKolumna, ileNiewiadomych+1);
@@ -195,7 +194,7 @@ end;
 function EliminacjaGaussaWiersze (var macierz : tMacierz; ileNiewiadomych : word; eps : double;
                           var wektorX : tWektorDouble; var wektorWiersz : tWektorIndeks) : boolean;
 var
-  i, j, wiersz, k, l : word;
+  i, j, wiersz, l : word;
   mnoznik, suma : double;
 begin
   for i:=0 to ileNiewiadomych-2 do
@@ -277,7 +276,119 @@ begin
   //jezeli funkcja zwrocila 'true', to oznacza, ze det!=0 i mozna wypisac wyniki
   if (EliminacjaGaussaWiersze (macierzAB, ileNiewiadomych, eps, wektorX, wektorWiersz)) then
   begin
-    writeln ('Funkcja eliminacji Gaussa-Jordana zwrocila true:');
+    writeln ('Funkcja eliminacji Gaussa z zamiana wierszy zwrocila true:');
+    for i:=0 to ileNiewiadomych-1 do
+    begin
+      writeln ('x', i+1, ' = ', wektorX[i]:8:4);
+    end;
+  end
+  //jezeli funkcja zwrocila 'false', to oznacza, ze det=0 i nie mozna wypisac wynikow
+  else
+  begin
+    writeln ('Macierz osobliwa, det = 0');
+  end;
+end;
+
+function EliminacjaGaussaJordana (var macierz : tMacierz; ileNiewiadomych : word; eps : double;
+                          var wektorX : tWektorDouble; var wektorWiersz : tWektorIndeks) : boolean;
+var
+  i, j, wiersz, l : word;
+  mnoznik, suma : double;
+begin
+  for i:=0 to ileNiewiadomych-2 do
+  begin
+    wiersz := i;
+    //przeszukanie forem za liczba najdalsza od zera i zamiana miejscami kolumn
+    for j:=i+1 to ileNiewiadomych-1 do
+    begin
+      if (Modul(macierz[wektorWiersz[wiersz]][i]) < Modul(macierz[wektorWiersz[j]][i])) then
+         wiersz := j;
+    end;
+    j:=wektorWiersz[wiersz];
+    wektorWiersz[wiersz]:=wektorWiersz[i];
+    wektorWiersz[i]:=j;
+    //sprawdzenie czy na przekatnej dalej jest jakies zero, zeby nie dzielic przez zero
+    for j:=i+1 to ileNiewiadomych-1 do
+    begin
+      if (Modul(macierz[wektorWiersz[i]][i]) < eps) then
+      begin
+        EliminacjaGaussaJordana := false;
+        Exit;
+      end;
+      //wyliczenie mnoznika
+      mnoznik:= (-1)*macierz[wektorWiersz[j]][i] / macierz [wektorWiersz[i]][i];
+
+      //dodanie wiersza pomnozonego przez mnoznik do wiersza, na ktorym operujemy
+      for wiersz:=i to ileNiewiadomych do
+      begin
+        macierz[wektorWiersz[j]][wiersz]:=macierz[wektorWiersz[j]][wiersz] + mnoznik * macierz[wektorWiersz[i]][wiersz];
+      end;
+
+      //kontrolne wypisanie
+      writeln ('Macierz AB:');
+      for wiersz:=0 to ileNiewiadomych-1 do
+      begin
+        for l:=0 to ileNiewiadomych do
+        write (macierz[wektorWiersz[wiersz]][l]:8:3,' ');
+        writeln;
+      end;
+      //
+    end;
+  end;
+  
+  for i:=ileNiewiadomych-1 downto 1 do
+  begin
+    for j:=i-1 downto 0 do
+    begin
+      mnoznik:= (-1)*macierz[wektorWiersz[j]][i] / macierz [wektorWiersz[i]][i];
+      for wiersz:=ileNiewiadomych downto j do
+      begin
+	macierz[wektorWiersz[j]][wiersz]:=macierz[wektorWiersz[j]][wiersz] + mnoznik * macierz[wektorWiersz[i]][wiersz];
+      end;
+    end;
+    //kontrolne wypisanie
+    writeln ('Macierz AB:');
+    for wiersz:=0 to ileNiewiadomych-1 do
+    begin
+      for l:=0 to ileNiewiadomych do
+      write (macierz[wektorWiersz[wiersz]][l]:8:3,' ');
+      writeln;
+    end;
+    //
+  end;
+  for i:=ileNiewiadomych-1 downto 0 do
+  begin
+    macierz[wektorWiersz[i]][ileNiewiadomych]:= macierz[wektorWiersz[i]][ileNiewiadomych] / macierz [wektorWiersz[i]][i];
+    macierz[wektorWiersz[i]][i] := macierz [wektorWiersz[i]][i] / macierz [wektorWiersz[i]][i];
+    wektorX[i] := macierz [wektorWiersz[i]][ileNiewiadomych];
+    //kontrolne wypisanie
+    writeln ('Macierz AB:');
+    for wiersz:=0 to ileNiewiadomych-1 do
+    begin
+      for l:=0 to ileNiewiadomych do
+      write (macierz[wektorWiersz[wiersz]][l]:8:3,' ');
+      writeln;
+    end;
+    //
+  end;
+  EliminacjaGaussaJordana:=true;
+end;
+
+procedure GaussJordan (var macierzAB : tMacierz; ileNiewiadomych : word; eps : double);
+var
+  wektorX : tWektorDouble;
+  wektorWiersz : tWektorIndeks;
+  i : word;
+begin
+  SetLength (wektorWiersz,ileNiewiadomych);
+  SetLength (wektorX,ileNiewiadomych);
+  for i:=0 to ileNiewiadomych-1 do
+      wektorWiersz[i]:=i;
+
+  //jezeli funkcja zwrocila 'true', to oznacza, ze det!=0 i mozna wypisac wyniki
+  if (EliminacjaGaussaJordana (macierzAB, ileNiewiadomych, eps, wektorX, wektorWiersz)) then
+  begin
+    writeln ('Funkcja eliminacji Gaussa z zamiana wierszy zwrocila true:');
     for i:=0 to ileNiewiadomych-1 do
     begin
       writeln ('x', i+1, ' = ', wektorX[i]:8:4);
@@ -389,6 +500,7 @@ begin
     writeln ('1 - metoda Gaussa bazowa (problem z zerami na przekatnej)');
     writeln ('2 - metoda Gaussa z zamiana kolumn (Gaussa-Crouta)');
     writeln ('3 - metoda Gaussa z zamiana wierszy');
+	writeln ('4 - metoda Gaussa-Jordana');
     writeln ('0 - wyjscie');
     readln (wybor);
     case (wybor) of
@@ -412,6 +524,13 @@ begin
         GotoweDane (macierzAB, ileNiewiadomych, eps);
         writeln ('Metoda eliminacji Gaussa z zamiana wierszy:');
         GaussWiersze (macierzAB, ileNiewiadomych, eps);
+      end;
+	  4 :
+      begin
+        //CzytajDane (macierzAB, ileNiewiadomych, eps);
+        GotoweDane (macierzAB, ileNiewiadomych, eps);
+        writeln ('Metoda eliminacji Gaussa-Jordana:');
+        GaussJordan (macierzAB, ileNiewiadomych, eps);
       end;
       0 :
       begin
