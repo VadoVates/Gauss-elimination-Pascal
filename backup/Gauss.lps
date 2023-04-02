@@ -9,73 +9,13 @@
         <Filename Value="Gauss.lpr"/>
         <IsPartOfProject Value="True"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="93"/>
-        <CursorPos X="32" Y="100"/>
-        <UsageCount Value="39"/>
+        <TopLine Value="238"/>
+        <CursorPos X="61" Y="251"/>
+        <UsageCount Value="49"/>
         <Loaded Value="True"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="Gauss.lpr"/>
-        <Caret Line="11" Column="13"/>
-      </Position>
-      <Position>
-        <Filename Value="Gauss.lpr"/>
-        <Caret Line="10" Column="21"/>
-      </Position>
-      <Position>
-        <Filename Value="Gauss.lpr"/>
-        <Caret Line="6" Column="28"/>
-      </Position>
-      <Position>
-        <Filename Value="Gauss.lpr"/>
-        <Caret Line="93" Column="7" TopLine="74"/>
-      </Position>
-      <Position>
-        <Filename Value="Gauss.lpr"/>
-        <Caret Line="59" Column="9" TopLine="40"/>
-      </Position>
-      <Position>
-        <Filename Value="Gauss.lpr"/>
-        <Caret Line="63" Column="11" TopLine="43"/>
-      </Position>
-      <Position>
-        <Filename Value="Gauss.lpr"/>
-        <Caret Line="72" TopLine="59"/>
-      </Position>
-      <Position>
-        <Filename Value="Gauss.lpr"/>
-        <Caret Line="68" Column="4" TopLine="53"/>
-      </Position>
-      <Position>
-        <Filename Value="Gauss.lpr"/>
-        <Caret Line="59" Column="9" TopLine="46"/>
-      </Position>
-      <Position>
-        <Filename Value="Gauss.lpr"/>
-        <Caret Line="16" Column="32" TopLine="3"/>
-      </Position>
-      <Position>
-        <Filename Value="Gauss.lpr"/>
-        <Caret Line="59" Column="9" TopLine="48"/>
-      </Position>
-      <Position>
-        <Filename Value="Gauss.lpr"/>
-        <Caret Line="64" Column="25" TopLine="40"/>
-      </Position>
-      <Position>
-        <Filename Value="Gauss.lpr"/>
-        <Caret Line="75" Column="31" TopLine="59"/>
-      </Position>
-      <Position>
-        <Filename Value="Gauss.lpr"/>
-        <Caret Line="53" Column="23" TopLine="22"/>
-      </Position>
-      <Position>
-        <Filename Value="Gauss.lpr"/>
-        <Caret Line="56" Column="9" TopLine="24"/>
-      </Position>
       <Position>
         <Filename Value="Gauss.lpr"/>
         <Caret Line="4" Column="4"/>
@@ -130,11 +70,71 @@
       </Position>
       <Position>
         <Filename Value="Gauss.lpr"/>
-        <Caret Line="159" Column="8" TopLine="209"/>
+        <Caret Line="144" Column="25" TopLine="135"/>
       </Position>
       <Position>
         <Filename Value="Gauss.lpr"/>
-        <Caret Line="144" Column="25" TopLine="135"/>
+        <Caret Line="241" Column="19" TopLine="210"/>
+      </Position>
+      <Position>
+        <Filename Value="Gauss.lpr"/>
+        <Caret Line="274" Column="3" TopLine="274"/>
+      </Position>
+      <Position>
+        <Filename Value="Gauss.lpr"/>
+        <Caret Line="242" Column="6" TopLine="225"/>
+      </Position>
+      <Position>
+        <Filename Value="Gauss.lpr"/>
+        <Caret Line="235" Column="30" TopLine="191"/>
+      </Position>
+      <Position>
+        <Filename Value="Gauss.lpr"/>
+        <Caret Line="218" Column="32" TopLine="200"/>
+      </Position>
+      <Position>
+        <Filename Value="Gauss.lpr"/>
+        <Caret Line="227" TopLine="203"/>
+      </Position>
+      <Position>
+        <Filename Value="Gauss.lpr"/>
+        <Caret Line="247" Column="6" TopLine="228"/>
+      </Position>
+      <Position>
+        <Filename Value="Gauss.lpr"/>
+        <Caret Line="295" Column="4" TopLine="276"/>
+      </Position>
+      <Position>
+        <Filename Value="Gauss.lpr"/>
+        <Caret Line="247" Column="4" TopLine="237"/>
+      </Position>
+      <Position>
+        <Filename Value="Gauss.lpr"/>
+        <Caret Line="255" Column="59" TopLine="228"/>
+      </Position>
+      <Position>
+        <Filename Value="Gauss.lpr"/>
+        <Caret Line="257" Column="32" TopLine="234"/>
+      </Position>
+      <Position>
+        <Filename Value="Gauss.lpr"/>
+        <Caret Line="239" Column="101" TopLine="234"/>
+      </Position>
+      <Position>
+        <Filename Value="Gauss.lpr"/>
+        <Caret Line="255" Column="7" TopLine="234"/>
+      </Position>
+      <Position>
+        <Filename Value="Gauss.lpr"/>
+        <Caret Line="250" Column="36" TopLine="234"/>
+      </Position>
+      <Position>
+        <Filename Value="Gauss.lpr"/>
+        <Caret Line="254" Column="9" TopLine="233"/>
+      </Position>
+      <Position>
+        <Filename Value="Gauss.lpr"/>
+        <Caret Line="260" Column="59" TopLine="236"/>
       </Position>
     </JumpHistory>
     <RunParams>
