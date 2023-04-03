@@ -356,6 +356,8 @@ begin
     end;
     //
   end;
+
+  //Wpisanie wynikow do wektora X wg kolejnosci wierszy i zrobienie jednostkowej macierzy
   for i:=ileNiewiadomych-1 downto 0 do
   begin
     macierz[wektorWiersz[i]][ileNiewiadomych]:= macierz[wektorWiersz[i]][ileNiewiadomych] / macierz [wektorWiersz[i]][i];
@@ -389,6 +391,65 @@ begin
   if (EliminacjaGaussaJordana (macierzAB, ileNiewiadomych, eps, wektorX, wektorWiersz)) then
   begin
     writeln ('Funkcja eliminacji Gaussa z zamiana wierszy zwrocila true:');
+    for i:=0 to ileNiewiadomych-1 do
+    begin
+      writeln ('x', i+1, ' = ', wektorX[i]:8:4);
+    end;
+  end
+  //jezeli funkcja zwrocila 'false', to oznacza, ze det=0 i nie mozna wypisac wynikow
+  else
+  begin
+    writeln ('Macierz osobliwa, det = 0');
+  end;
+end;
+
+function EliminacjaU (var macierz : tMacierz; ileNiewiadomych : word; eps : double;
+                          var wektorX, wektorY : tWektorDouble; var wektorWiersz : tWektorIndeks) : boolean;
+var
+  i, j, wiersz, l : word;
+  mnoznik, suma : double;
+begin
+  EliminacjaU:=true;
+end;
+
+function EliminacjaL (var macierz : tMacierz; ileNiewiadomych : word; eps : double;
+                          var wektorY : tWektorDouble; var wektorWiersz : tWektorIndeks) : boolean;
+var
+  i, j, wiersz, l : word;
+  mnoznik, suma : double;
+begin
+  //obliczanie Y i wpisywanie wartosci Y do wektora Y
+  for i:=0 to ileNiewiadomych-1 do
+  begin
+    //suma jest rowna wyrazowi wolnemu
+    suma := macierz[i][ileNiewiadomych];
+    for j:=i+1 to ileNiewiadomych-1 do
+    begin
+      suma := suma - macierz[i][j] * wektorY[j];
+    end;
+    //jezeli przekatna ma ktorykolwiek element = 0, wtedy macierz jest osobliwa,
+    //zwracamy false i konczymy funkcje
+    wektorX[i]:=suma;
+  end;
+  EliminacjaL:=true;
+end;
+
+procedure LU (var macierzAB : tMacierz; ileNiewiadomych : word; eps : double);
+var
+  wektorX, wektorY : tWektorDouble;
+  wektorWiersz : tWektorIndeks;
+  i : word;
+begin
+  SetLength (wektorWiersz,ileNiewiadomych);
+  SetLength (wektorX,ileNiewiadomych);
+  SetLength (wektorY,ileNiewiadomych);
+  for i:=0 to ileNiewiadomych-1 do
+      wektorWiersz[i]:=i;
+
+  //jezeli funkcja zwrocila 'true', to oznacza, ze det!=0 i mozna wypisac wyniki
+  if (EliminacjaL (macierzAB, ileNiewiadomych, eps, wektorY, wektorWiersz) and EliminacjaU (macierzAB, ileNiewiadomych, eps, wektorX, wektorY, wektorWiersz)) then
+  begin
+    writeln ('Funkcja eliminacji LU z zamiana wierszy zwrocila true:');
     for i:=0 to ileNiewiadomych-1 do
     begin
       writeln ('x', i+1, ' = ', wektorX[i]:8:4);
@@ -500,7 +561,7 @@ begin
     writeln ('1 - metoda Gaussa bazowa (problem z zerami na przekatnej)');
     writeln ('2 - metoda Gaussa z zamiana kolumn (Gaussa-Crouta)');
     writeln ('3 - metoda Gaussa z zamiana wierszy');
-	writeln ('4 - metoda Gaussa-Jordana');
+    writeln ('4 - metoda Gaussa-Jordana');
     writeln ('0 - wyjscie');
     readln (wybor);
     case (wybor) of
@@ -525,7 +586,7 @@ begin
         writeln ('Metoda eliminacji Gaussa z zamiana wierszy:');
         GaussWiersze (macierzAB, ileNiewiadomych, eps);
       end;
-	  4 :
+      4 :
       begin
         //CzytajDane (macierzAB, ileNiewiadomych, eps);
         GotoweDane (macierzAB, ileNiewiadomych, eps);
