@@ -298,7 +298,7 @@ begin
   for i:=0 to ileNiewiadomych-2 do
   begin
     wiersz := i;
-    //przeszukanie forem za liczba najdalsza od zera i zamiana miejscami kolumn
+    //przeszukanie forem za liczba najdalsza od zera i zamiana miejscami wierszy
     for j:=i+1 to ileNiewiadomych-1 do
     begin
       if (Modul(macierz[wektorWiersz[wiersz]][i]) < Modul(macierz[wektorWiersz[j]][i])) then
@@ -403,63 +403,75 @@ begin
   end;
 end;
 
-function EliminacjaU (var macierz : tMacierz; ileNiewiadomych : word; eps : double;
-                          var wektorX, wektorY : tWektorDouble; var wektorWiersz : tWektorIndeks) : boolean;
-var
-  i, j, wiersz, l : word;
-  mnoznik, suma : double;
-begin
-  EliminacjaU:=true;
-end;
-
-function EliminacjaL (var macierz : tMacierz; ileNiewiadomych : word; eps : double;
-                          var wektorY : tWektorDouble; var wektorWiersz : tWektorIndeks) : boolean;
-var
-  i, j, wiersz, l : word;
-  mnoznik, suma : double;
-begin
-  //obliczanie Y i wpisywanie wartosci Y do wektora Y
-  for i:=0 to ileNiewiadomych-1 do
-  begin
-    //suma jest rowna wyrazowi wolnemu
-    suma := macierz[i][ileNiewiadomych];
-    for j:=i+1 to ileNiewiadomych-1 do
-    begin
-      suma := suma - macierz[i][j] * wektorY[j];
-    end;
-    //jezeli przekatna ma ktorykolwiek element = 0, wtedy macierz jest osobliwa,
-    //zwracamy false i konczymy funkcje
-    wektorY[i]:=suma;
-  end;
-  EliminacjaL:=true;
-end;
-
-procedure LU (var macierzAB : tMacierz; ileNiewiadomych : word; eps : double);
+procedure Jacobi (var macierz : tMacierz; ileNiewiadomych : word; eps : double);
 var
   wektorX, wektorY : tWektorDouble;
   wektorWiersz : tWektorIndeks;
-  i : word;
+  i, wiersz, j, l : word;
 begin
   SetLength (wektorWiersz,ileNiewiadomych);
   SetLength (wektorX,ileNiewiadomych);
   SetLength (wektorY,ileNiewiadomych);
   for i:=0 to ileNiewiadomych-1 do
       wektorWiersz[i]:=i;
-
-  //jezeli funkcja zwrocila 'true', to oznacza, ze det!=0 i mozna wypisac wyniki
-  if (EliminacjaL (macierzAB, ileNiewiadomych, eps, wektorY, wektorWiersz) and EliminacjaU (macierzAB, ileNiewiadomych, eps, wektorX, wektorY, wektorWiersz)) then
+  for i:=0 to ileNiewiadomych-1 do
   begin
-    writeln ('Funkcja eliminacji LU z zamiana wierszy zwrocila true:');
-    for i:=0 to ileNiewiadomych-1 do
+    wiersz := i;
+    //przeszukanie forem za liczba najdalsza od zera i zamiana miejscami wierszy
+    for j:=i+1 to ileNiewiadomych-1 do
     begin
-      writeln ('x', i+1, ' = ', wektorX[i]:8:4);
+      if (Modul(macierz[wektorWiersz[wiersz]][i]) < Modul(macierz[wektorWiersz[j]][i])) then
+         wiersz := j;
     end;
-  end
-  //jezeli funkcja zwrocila 'false', to oznacza, ze det=0 i nie mozna wypisac wynikow
-  else
-  begin
-    writeln ('Macierz osobliwa, det = 0');
+    j:=wektorWiersz[wiersz];
+    wektorWiersz[wiersz]:=wektorWiersz[i];
+    wektorWiersz[i]:=j;
+    //sprawdzenie czy na przekatnej dalej jest jakies zero, zeby nie dzielic przez zero
+    for j:=i+1 to ileNiewiadomych-1 do
+    begin
+      if (Modul(macierz[wektorWiersz[i]][i]) < eps) then
+      begin
+        writeln ('DET=0, nie da rady psze pana!');
+      end;
+    end;
+    //kontrolne wypisanie
+    writeln ('Macierz AB:');
+    for wiersz:=0 to ileNiewiadomych-1 do
+    begin
+      for l:=0 to ileNiewiadomych do
+      write (macierz[wektorWiersz[wiersz]][l]:8:3,' ');
+      writeln;
+    end;
+    //
   end;
+
+  for i:=0 to ileNiewiadomych-1 do
+  begin
+    macierz[wektorWiersz[i]][i] := 1/macierz[wektorWiersz[i]][i];
+  end;
+  j:=0;
+  for i:=0 to ileNiewiadomych-1 do
+  begin
+    for j:=0 to ileNiewiadomych-1 do
+    begin
+      if (j<>i) then macierz[wektorWiersz[i]][j]:=-macierz[wektorWiersz[i]][j]*macierz[wektorWiersz[i]][i];
+    end;
+  end;
+  //kontrolne wypisanie
+  writeln ('Macierz AB:');
+  for wiersz:=0 to ileNiewiadomych-1 do
+  begin
+    for l:=0 to ileNiewiadomych do
+    write (macierz[wektorWiersz[wiersz]][l]:8:3,' ');
+    writeln;
+  end;
+  //
+
+  { zabezpieczenie przed nieskonczona petla
+  repeat
+
+  until (Modul(macierz[wektorWiersz[i]][i])>= Modul(suma));
+  }
 end;
 
 procedure CzytajDane (var macierzAB : tMacierz; var ileNiewiadomych : word; var eps : double);
@@ -562,6 +574,7 @@ begin
     writeln ('2 - metoda Gaussa z zamiana kolumn (Gaussa-Crouta)');
     writeln ('3 - metoda Gaussa z zamiana wierszy');
     writeln ('4 - metoda Gaussa-Jordana');
+    writeln ('5 - metoda Jacobiego (iteracyjna)');
     writeln ('0 - wyjscie');
     readln (wybor);
     case (wybor) of
@@ -588,10 +601,17 @@ begin
       end;
       4 :
       begin
-        //CzytajDane (macierzAB, ileNiewiadomych, eps);
-        GotoweDane (macierzAB, ileNiewiadomych, eps);
+        CzytajDane (macierzAB, ileNiewiadomych, eps);
+        //GotoweDane (macierzAB, ileNiewiadomych, eps);
         writeln ('Metoda eliminacji Gaussa-Jordana:');
         GaussJordan (macierzAB, ileNiewiadomych, eps);
+      end;
+      5 :
+      begin
+        CzytajDane (macierzAB, ileNiewiadomych, eps);
+        //GotoweDane (macierzAB, ileNiewiadomych, eps);
+        writeln ('Metoda eliminacji LU:');
+        Jacobi (macierzAB, ileNiewiadomych, eps);
       end;
       0 :
       begin
