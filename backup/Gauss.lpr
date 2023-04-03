@@ -371,29 +371,6 @@ begin
     end;
     //
   end;
-
-  {
-  //obliczanie x i wpisywanie wartosci x do wektora X
-  //od konca, bo macierz trojkatna gorna
-  for i:=(ileNiewiadomych-1) downto 0 do
-  begin
-    //suma jest rowna wyrazowi wolnemu
-    suma := macierz[wektorWiersz[i]][ileNiewiadomych];
-    //j do i+1 po to, zeby petla nie wykonywala sie gdy wektorX jest pusty
-    for j:=(ileNiewiadomych-1) downto (i+1) do
-    begin
-      suma := suma - macierz[wektorWiersz[i]][j] * wektorX[j];
-    end;
-    //jezeli przekatna ma ktorykolwiek element = 0, wtedy macierz jest osobliwa,
-    //zwracamy false i konczymy funkcje
-    if (Modul(macierz[wektorWiersz[i]][i]) < eps) then
-    begin
-      EliminacjaGaussaJordana := false;
-      Exit;
-    end;
-    wektorX[i]:=suma/macierz[wektorWiersz[i]][i];
-  end;
-  }
   EliminacjaGaussaJordana:=true;
 end;
 

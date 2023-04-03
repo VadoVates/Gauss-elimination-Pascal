@@ -401,6 +401,204 @@ begin
   end;
 end;
 
+function EliminacjaU (var macierz : tMacierz; ileNiewiadomych : word; eps : double;
+                          var wektorX, wektorY : tWektorDouble; var wektorWiersz : tWektorIndeks) : boolean;
+var
+  i, j, wiersz, l : word;
+  mnoznik, suma : double;
+begin
+  for i:=0 to ileNiewiadomych-2 do
+  begin
+    wiersz := i;
+    //przeszukanie forem za liczba najdalsza od zera i zamiana miejscami kolumn
+    for j:=i+1 to ileNiewiadomych-1 do
+    begin
+      if (Modul(macierz[wektorWiersz[wiersz]][i]) < Modul(macierz[wektorWiersz[j]][i])) then
+         wiersz := j;
+    end;
+    j:=wektorWiersz[wiersz];
+    wektorWiersz[wiersz]:=wektorWiersz[i];
+    wektorWiersz[i]:=j;
+    //sprawdzenie czy na przekatnej dalej jest jakies zero, zeby nie dzielic przez zero
+    for j:=i+1 to ileNiewiadomych-1 do
+    begin
+      if (Modul(macierz[wektorWiersz[i]][i]) < eps) then
+      begin
+        EliminacjaGaussaJordana := false;
+        Exit;
+      end;
+      //wyliczenie mnoznika
+      mnoznik:= (-1)*macierz[wektorWiersz[j]][i] / macierz [wektorWiersz[i]][i];
+
+      //dodanie wiersza pomnozonego przez mnoznik do wiersza, na ktorym operujemy
+      for wiersz:=i to ileNiewiadomych do
+      begin
+        macierz[wektorWiersz[j]][wiersz]:=macierz[wektorWiersz[j]][wiersz] + mnoznik * macierz[wektorWiersz[i]][wiersz];
+      end;
+
+      //kontrolne wypisanie
+      writeln ('Macierz AB:');
+      for wiersz:=0 to ileNiewiadomych-1 do
+      begin
+        for l:=0 to ileNiewiadomych do
+        write (macierz[wektorWiersz[wiersz]][l]:8:3,' ');
+        writeln;
+      end;
+      //
+    end;
+  end;
+
+  for i:=ileNiewiadomych-1 downto 1 do
+  begin
+    for j:=i-1 downto 0 do
+    begin
+      mnoznik:= (-1)*macierz[wektorWiersz[j]][i] / macierz [wektorWiersz[i]][i];
+      for wiersz:=ileNiewiadomych downto j do
+      begin
+	macierz[wektorWiersz[j]][wiersz]:=macierz[wektorWiersz[j]][wiersz] + mnoznik * macierz[wektorWiersz[i]][wiersz];
+      end;
+    end;
+    //kontrolne wypisanie
+    writeln ('Macierz AB:');
+    for wiersz:=0 to ileNiewiadomych-1 do
+    begin
+      for l:=0 to ileNiewiadomych do
+      write (macierz[wektorWiersz[wiersz]][l]:8:3,' ');
+      writeln;
+    end;
+    //
+  end;
+  for i:=ileNiewiadomych-1 downto 0 do
+  begin
+    macierz[wektorWiersz[i]][ileNiewiadomych]:= macierz[wektorWiersz[i]][ileNiewiadomych] / macierz [wektorWiersz[i]][i];
+    macierz[wektorWiersz[i]][i] := macierz [wektorWiersz[i]][i] / macierz [wektorWiersz[i]][i];
+    wektorX[i] := macierz [wektorWiersz[i]][ileNiewiadomych];
+    //kontrolne wypisanie
+    writeln ('Macierz AB:');
+    for wiersz:=0 to ileNiewiadomych-1 do
+    begin
+      for l:=0 to ileNiewiadomych do
+      write (macierz[wektorWiersz[wiersz]][l]:8:3,' ');
+      writeln;
+    end;
+    //
+  end;
+  EliminacjaGaussaJordana:=true;
+end;
+
+function EliminacjaL (var macierz : tMacierz; ileNiewiadomych : word; eps : double;
+                          var wektorY : tWektorDouble; var wektorWiersz : tWektorIndeks) : boolean;
+var
+  i, j, wiersz, l : word;
+  mnoznik, suma : double;
+begin
+  for i:=0 to ileNiewiadomych-2 do
+  begin
+    wiersz := i;
+    //przeszukanie forem za liczba najdalsza od zera i zamiana miejscami kolumn
+    for j:=i+1 to ileNiewiadomych-1 do
+    begin
+      if (Modul(macierz[wektorWiersz[wiersz]][i]) < Modul(macierz[wektorWiersz[j]][i])) then
+         wiersz := j;
+    end;
+    j:=wektorWiersz[wiersz];
+    wektorWiersz[wiersz]:=wektorWiersz[i];
+    wektorWiersz[i]:=j;
+    //sprawdzenie czy na przekatnej dalej jest jakies zero, zeby nie dzielic przez zero
+    for j:=i+1 to ileNiewiadomych-1 do
+    begin
+      if (Modul(macierz[wektorWiersz[i]][i]) < eps) then
+      begin
+        EliminacjaGaussaJordana := false;
+        Exit;
+      end;
+      //wyliczenie mnoznika
+      mnoznik:= (-1)*macierz[wektorWiersz[j]][i] / macierz [wektorWiersz[i]][i];
+
+      //dodanie wiersza pomnozonego przez mnoznik do wiersza, na ktorym operujemy
+      for wiersz:=i to ileNiewiadomych do
+      begin
+        macierz[wektorWiersz[j]][wiersz]:=macierz[wektorWiersz[j]][wiersz] + mnoznik * macierz[wektorWiersz[i]][wiersz];
+      end;
+
+      //kontrolne wypisanie
+      writeln ('Macierz AB:');
+      for wiersz:=0 to ileNiewiadomych-1 do
+      begin
+        for l:=0 to ileNiewiadomych do
+        write (macierz[wektorWiersz[wiersz]][l]:8:3,' ');
+        writeln;
+      end;
+      //
+    end;
+  end;
+
+  for i:=ileNiewiadomych-1 downto 1 do
+  begin
+    for j:=i-1 downto 0 do
+    begin
+      mnoznik:= (-1)*macierz[wektorWiersz[j]][i] / macierz [wektorWiersz[i]][i];
+      for wiersz:=ileNiewiadomych downto j do
+      begin
+	macierz[wektorWiersz[j]][wiersz]:=macierz[wektorWiersz[j]][wiersz] + mnoznik * macierz[wektorWiersz[i]][wiersz];
+      end;
+    end;
+    //kontrolne wypisanie
+    writeln ('Macierz AB:');
+    for wiersz:=0 to ileNiewiadomych-1 do
+    begin
+      for l:=0 to ileNiewiadomych do
+      write (macierz[wektorWiersz[wiersz]][l]:8:3,' ');
+      writeln;
+    end;
+    //
+  end;
+  for i:=ileNiewiadomych-1 downto 0 do
+  begin
+    macierz[wektorWiersz[i]][ileNiewiadomych]:= macierz[wektorWiersz[i]][ileNiewiadomych] / macierz [wektorWiersz[i]][i];
+    macierz[wektorWiersz[i]][i] := macierz [wektorWiersz[i]][i] / macierz [wektorWiersz[i]][i];
+    wektorX[i] := macierz [wektorWiersz[i]][ileNiewiadomych];
+    //kontrolne wypisanie
+    writeln ('Macierz AB:');
+    for wiersz:=0 to ileNiewiadomych-1 do
+    begin
+      for l:=0 to ileNiewiadomych do
+      write (macierz[wektorWiersz[wiersz]][l]:8:3,' ');
+      writeln;
+    end;
+    //
+  end;
+  EliminacjaGaussaJordana:=true;
+end;
+
+procedure LU (var macierzAB : tMacierz; ileNiewiadomych : word; eps : double);
+var
+  wektorX, wektorY : tWektorDouble;
+  wektorWiersz : tWektorIndeks;
+  i : word;
+begin
+  SetLength (wektorWiersz,ileNiewiadomych);
+  SetLength (wektorX,ileNiewiadomych);
+  SetLength (wektorY,ileNiewiadomych);
+  for i:=0 to ileNiewiadomych-1 do
+      wektorWiersz[i]:=i;
+
+  //jezeli funkcja zwrocila 'true', to oznacza, ze det!=0 i mozna wypisac wyniki
+  if (EliminacjaL (macierzAB, ileNiewiadomych, eps, wektorY, wektorWiersz) and EliminacjaU (macierzAB, ileNiewiadomych, eps, wektorX, wektorY, wektorWiersz)) then
+  begin
+    writeln ('Funkcja eliminacji LU z zamiana wierszy zwrocila true:');
+    for i:=0 to ileNiewiadomych-1 do
+    begin
+      writeln ('x', i+1, ' = ', wektorX[i]:8:4);
+    end;
+  end
+  //jezeli funkcja zwrocila 'false', to oznacza, ze det=0 i nie mozna wypisac wynikow
+  else
+  begin
+    writeln ('Macierz osobliwa, det = 0');
+  end;
+end;
+
 procedure CzytajDane (var macierzAB : tMacierz; var ileNiewiadomych : word; var eps : double);
 var
   i, j : word;
