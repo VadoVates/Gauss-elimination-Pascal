@@ -200,7 +200,7 @@ begin
   for i:=0 to ileNiewiadomych-2 do
   begin
     wiersz := i;
-    //przeszukanie forem za liczba najdalsza od zera i zamiana miejscami kolumn
+    //przeszukanie forem za liczba najdalsza od zera i zamiana miejscami wierszy
     for j:=i+1 to ileNiewiadomych-1 do
     begin
       if (Modul(macierz[wektorWiersz[wiersz]][i]) < Modul(macierz[wektorWiersz[j]][i])) then
@@ -403,13 +403,14 @@ begin
   end;
 end;
 
-
-
 procedure Jacobi (var macierz : tMacierz; ileNiewiadomych : word; eps : double);
 var
   wektorX, wektorY : tWektorDouble;
   wektorWiersz : tWektorIndeks;
   i, wiersz, j, l : word;
+  maxIter : word;
+  suma, modulSuma : double;
+  warunek : boolean;
 begin
   SetLength (wektorWiersz,ileNiewiadomych);
   SetLength (wektorX,ileNiewiadomych);
@@ -436,7 +437,7 @@ begin
         writeln ('DET=0, nie da rady psze pana!');
       end;
     end;
-    //kontrolne wypisanie
+    {kontrolne wypisanie
     writeln ('Macierz AB:');
     for wiersz:=0 to ileNiewiadomych-1 do
     begin
@@ -444,12 +445,14 @@ begin
       write (macierz[wektorWiersz[wiersz]][l]:8:3,' ');
       writeln;
     end;
-    //
+    }
   end;
 
   for i:=0 to ileNiewiadomych-1 do
   begin
     macierz[wektorWiersz[i]][i] := 1/macierz[wektorWiersz[i]][i];
+    macierz[wektorWiersz[i]][ileNiewiadomych] := macierz[wektorWiersz[i]][ileNiewiadomych] * macierz[wektorWiersz[i]][i];
+    wektorY[i]:= macierz[wektorWiersz[i]][ileNiewiadomych];
   end;
   j:=0;
   for i:=0 to ileNiewiadomych-1 do
@@ -468,12 +471,39 @@ begin
     writeln;
   end;
   //
-
-  { zabezpieczenie przed nieskonczona petla
+  writeln ('Dobra, kotles, ile iteracji?');
+  read (maxIter);
+  l:=0;
+  warunek:=false;
   repeat
-
-  until (Modul(macierz[wektorWiersz[i]][i])>= Modul(suma));
-  }
+    for i:=0 to ileNiewiadomych-1 do
+    begin
+      suma:=0;
+      modulSuma:=0;
+      for j:=0 to ileNiewiadomych-1 do
+      begin
+        if (j<>i) then
+        begin
+           suma:= suma + wektorY[j]*macierz[wektorWiersz[i]][j];
+           modulSuma:= modulSuma + Modul(wektorY[j]*macierz[wektorWiersz[i]][j]);
+        end;
+        if (Modul(macierz[wektorWiersz[i]][i])>modulSuma) then
+           warunek:=true;
+      end;
+      wektorX[i]:=macierz[wektorWiersz[i]][ileNiewiadomych]+suma;
+      writeln ('x',i+1,'=',wektorX[i]:8:4);
+    end;
+    for i:=0 to ileNiewiadomych-1 do
+    begin
+      wektorY[i]:=wektorX[i];
+    end;
+    l:=l+1;
+    if ((warunek) or (maxIter=l)) then
+    begin
+      if (warunek) then writeln ('Osiagnieto koncowy warunek zbieznosci');
+      if (maxIter=1) then writeln ('Osiagnieto koncowy warunek ilosci iteracji');
+    end;
+  until (warunek) or (maxIter=l);
 end;
 
 procedure CzytajDane (var macierzAB : tMacierz; var ileNiewiadomych : word; var eps : double);
@@ -502,7 +532,7 @@ procedure GotoweDane (var macierzAB : tMacierz; var ileNiewiadomych : word; var 
 var
   i : word;
 begin
-  write ('Podaj czy wolisz dane latwiejsze [1], czy trudniejsze [2] (z zerami na przekatnej): ');
+  write ('Podaj czy wolisz dane latwiejsze [1], czy trudniejsze [2] (z zerami na przekatnej), czy [3]: ');
   read (i);
   ileNiewiadomych:=4;
   eps:=1e-12;
@@ -557,8 +587,34 @@ begin
     end
     else
     begin
-      writeln ('Wyjscie');
-      Exit;
+      if (i=3) then
+      begin
+        macierzAB[0][0]:=4;
+        macierzAB[0][1]:=-1;
+        macierzAB[0][2]:=-0.2;
+        macierzAB[0][3]:=2;
+        macierzAB[0][4]:=30;
+        macierzAB[1][0]:=-1;
+        macierzAB[1][1]:=5;
+        macierzAB[1][2]:=0;
+        macierzAB[1][3]:=-2;
+        macierzAB[1][4]:=0;
+        macierzAB[2][0]:=0.2;
+        macierzAB[2][1]:=1;
+        macierzAB[2][2]:=10;
+        macierzAB[2][3]:=-1;
+        macierzAB[2][4]:=-10;
+        macierzAB[3][0]:=0;
+        macierzAB[3][1]:=-2;
+        macierzAB[3][2]:=-1;
+        macierzAB[3][3]:=4;
+        macierzAB[3][4]:=5;
+      end
+      else
+      begin
+        writeln ('Wyjscie');
+        Exit;
+      end;
     end;
   end;
 end;
@@ -603,16 +659,16 @@ begin
       end;
       4 :
       begin
-        CzytajDane (macierzAB, ileNiewiadomych, eps);
-        //GotoweDane (macierzAB, ileNiewiadomych, eps);
+        //CzytajDane (macierzAB, ileNiewiadomych, eps);
+        GotoweDane (macierzAB, ileNiewiadomych, eps);
         writeln ('Metoda eliminacji Gaussa-Jordana:');
         GaussJordan (macierzAB, ileNiewiadomych, eps);
       end;
       5 :
       begin
-        CzytajDane (macierzAB, ileNiewiadomych, eps);
-        //GotoweDane (macierzAB, ileNiewiadomych, eps);
-        writeln ('Metoda eliminacji LU:');
+        //CzytajDane (macierzAB, ileNiewiadomych, eps);
+        GotoweDane (macierzAB, ileNiewiadomych, eps);
+        writeln ('Metoda eliminacji Jacobiego (iteracyjna):');
         Jacobi (macierzAB, ileNiewiadomych, eps);
       end;
       0 :
