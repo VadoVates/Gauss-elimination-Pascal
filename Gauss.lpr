@@ -13,12 +13,34 @@ begin
   Modul:=x;
 end;
 
+procedure Wypisanie (macierz : tMacierz; ileNiewiadomych:word; wektorWiersz,
+                          wektorKolumna : tWektorIndeks);
+var
+  i, j : word;
+begin
+  for i:=0 to ileNiewiadomych-1 do
+  begin
+    write ('[');
+    for j:=0 to ileNiewiadomych do
+    begin
+      if (wektorKolumna[j]=ileNiewiadomych) then write (' | ');
+      write (macierz[wektorWiersz[i]][wektorKolumna[j]]:8:4);
+    end;
+    writeln (']');
+  end;
+  writeln;
+end;
+
 function EliminacjaGaussa (var macierz : tMacierz; ileNiewiadomych : word; eps : double;
                           var wektorX : tWektorDouble) : boolean;
 var
-  i, j, kolumna, k, l : word;
+  i, j, kolumna : word;
   mnoznik, suma : double;
+  wektorIndeks : tWektorIndeks;
 begin
+  SetLength (wektorIndeks,ileNiewiadomych+1);
+  for i:=0 to ileNiewiadomych do
+      wektorIndeks[i]:=i;
   //petla for - tworzymy macierz trojkatna gorna
   //do -2, bo nie potrzebujemy zerowac parametru przy ostatniej niewiadomej.
   for i:=0 to ileNiewiadomych-2 do
@@ -39,13 +61,7 @@ begin
       macierz[j][kolumna] := macierz [j][kolumna] + mnoznik * macierz[i][kolumna];
 
       //kontrolne wypisanie
-      writeln ('Macierz AB:');
-      for k:=0 to ileNiewiadomych-1 do
-      begin
-        for l:=0 to ileNiewiadomych do
-        write (macierz[k][l]:8:3,' ');
-        writeln;
-      end;
+      Wypisanie (macierz, ileNiewiadomych, wektorIndeks, wektorIndeks);
       //
     end;
   end;
@@ -99,9 +115,13 @@ end;
 function EliminacjaGaussaCrouta (var macierz : tMacierz; ileNiewiadomych : word; eps : double;
                           var wektorX : tWektorDouble; var wektorKolumna : tWektorIndeks) : boolean;
 var
-  i, j, kolumna, l : word;
+  i, j, kolumna : word;
   mnoznik, suma : double;
+  wektorWiersz : tWektorIndeks;
 begin
+  SetLength (wektorWiersz, ileNiewiadomych);
+  for i:=0 to ileNiewiadomych-1 do
+      wektorWiersz[i]:=i;
   //petla for - tworzymy macierz trojkatna gorna
   //do -2, bo nie potrzebujemy zerowac parametru przy ostatniej niewiadomej.
   for i:=0 to ileNiewiadomych-2 do
@@ -134,13 +154,7 @@ begin
       end;
 
       //kontrolne wypisanie
-      writeln ('Macierz AB:');
-      for l:=0 to ileNiewiadomych-1 do
-      begin
-        for kolumna:=0 to ileNiewiadomych do
-        write (macierz[l][wektorKolumna[kolumna]]:8:3,' ');
-        writeln;
-      end;
+      Wypisanie (macierz, ileNiewiadomych, wektorWiersz, wektorKolumna);
       //
     end;
   end;
@@ -194,9 +208,13 @@ end;
 function EliminacjaGaussaWiersze (var macierz : tMacierz; ileNiewiadomych : word; eps : double;
                           var wektorX : tWektorDouble; var wektorWiersz : tWektorIndeks) : boolean;
 var
-  i, j, wiersz, l : word;
+  i, j, wiersz : word;
   mnoznik, suma : double;
+  wektorKolumna : tWektorIndeks;
 begin
+  SetLength (wektorKolumna, ileNiewiadomych+1);
+  for i:=0 to ileNiewiadomych do
+      wektorKolumna[i]:=i;
   for i:=0 to ileNiewiadomych-2 do
   begin
     wiersz := i;
@@ -227,13 +245,7 @@ begin
       end;
 
       //kontrolne wypisanie
-      writeln ('Macierz AB:');
-      for wiersz:=0 to ileNiewiadomych-1 do
-      begin
-        for l:=0 to ileNiewiadomych do
-        write (macierz[wektorWiersz[wiersz]][l]:8:3,' ');
-        writeln;
-      end;
+      Wypisanie (macierz, ileNiewiadomych, wektorWiersz, wektorKolumna);
       //
     end;
   end;
@@ -292,9 +304,13 @@ end;
 function EliminacjaGaussaJordana (var macierz : tMacierz; ileNiewiadomych : word; eps : double;
                           var wektorX : tWektorDouble; var wektorWiersz : tWektorIndeks) : boolean;
 var
-  i, j, wiersz, l : word;
-  mnoznik, suma : double;
+  i, j, wiersz : word;
+  mnoznik : double;
+  wektorKolumna : tWektorIndeks;
 begin
+  SetLength (wektorKolumna,ileNiewiadomych+1);
+  for i:=0 to ileNiewiadomych do
+      wektorKolumna[i]:=i;
   for i:=0 to ileNiewiadomych-2 do
   begin
     wiersz := i;
@@ -325,13 +341,7 @@ begin
       end;
 
       //kontrolne wypisanie
-      writeln ('Macierz AB:');
-      for wiersz:=0 to ileNiewiadomych-1 do
-      begin
-        for l:=0 to ileNiewiadomych do
-        write (macierz[wektorWiersz[wiersz]][l]:8:3,' ');
-        writeln;
-      end;
+      Wypisanie (macierz, ileNiewiadomych, wektorWiersz, wektorKolumna);
       //
     end;
   end;
@@ -347,13 +357,7 @@ begin
       end;
     end;
     //kontrolne wypisanie
-    writeln ('Macierz AB:');
-    for wiersz:=0 to ileNiewiadomych-1 do
-    begin
-      for l:=0 to ileNiewiadomych do
-      write (macierz[wektorWiersz[wiersz]][l]:8:3,' ');
-      writeln;
-    end;
+    Wypisanie (macierz, ileNiewiadomych, wektorWiersz, wektorKolumna);
     //
   end;
 
@@ -364,13 +368,7 @@ begin
     macierz[wektorWiersz[i]][i] := macierz [wektorWiersz[i]][i] / macierz [wektorWiersz[i]][i];
     wektorX[i] := macierz [wektorWiersz[i]][ileNiewiadomych];
     //kontrolne wypisanie
-    writeln ('Macierz AB:');
-    for wiersz:=0 to ileNiewiadomych-1 do
-    begin
-      for l:=0 to ileNiewiadomych do
-      write (macierz[wektorWiersz[wiersz]][l]:8:3,' ');
-      writeln;
-    end;
+    Wypisanie (macierz, ileNiewiadomych, wektorWiersz, wektorKolumna);
     //
   end;
   EliminacjaGaussaJordana:=true;
@@ -405,18 +403,20 @@ end;
 
 procedure Jacobi (var macierz : tMacierz; ileNiewiadomych : word; eps : double);
 var
-  wektorX, wektorY : tWektorDouble;
-  wektorWiersz : tWektorIndeks;
+  wektorX : tWektorDouble;
+  wektorWiersz, wektorKolumna : tWektorIndeks;
   i, wiersz, j, l : word;
   maxIter : word;
   suma, modulSuma : double;
-  warunek : boolean;
 begin
   SetLength (wektorWiersz,ileNiewiadomych);
+  SetLength (wektorKolumna,ileNiewiadomych+1);
   SetLength (wektorX,ileNiewiadomych);
-  SetLength (wektorY,ileNiewiadomych);
+
   for i:=0 to ileNiewiadomych-1 do
       wektorWiersz[i]:=i;
+  for i:=0 to ileNiewiadomych do
+      wektorKolumna[i]:=i;
   for i:=0 to ileNiewiadomych-1 do
   begin
     wiersz := i;
@@ -434,41 +434,17 @@ begin
     begin
       if (Modul(macierz[wektorWiersz[i]][i]) < eps) then
       begin
-        writeln ('DET=0, nie da rady psze pana!');
+        writeln ('DET=0, algorytm konczy w tym miejscu.');
       end;
     end;
-    {kontrolne wypisanie
-    writeln ('Macierz AB:');
-    for wiersz:=0 to ileNiewiadomych-1 do
-    begin
-      for l:=0 to ileNiewiadomych do
-      write (macierz[wektorWiersz[wiersz]][l]:8:3,' ');
-      writeln;
-    end;
-    }
   end;
 
   for i:=0 to ileNiewiadomych-1 do
   begin
     macierz[wektorWiersz[i]][i] := 1/macierz[wektorWiersz[i]][i];
-    //macierz[wektorWiersz[i]][ileNiewiadomych] := macierz[wektorWiersz[i]][ileNiewiadomych] * macierz[wektorWiersz[i]][i];
-    //wektorY[i]:= macierz[wektorWiersz[i]][ileNiewiadomych];
   end;
-  {for i:=0 to ileNiewiadomych-1 do
-  begin
-    for j:=0 to ileNiewiadomych-1 do
-    begin
-      if (j<>i) then macierz[wektorWiersz[i]][j]:=macierz[wektorWiersz[i]][j]*macierz[wektorWiersz[i]][i];
-    end;
-  end;}
   //kontrolne wypisanie
-  writeln ('Macierz AB:');
-  for wiersz:=0 to ileNiewiadomych-1 do
-  begin
-    for l:=0 to ileNiewiadomych do
-    write (macierz[wektorWiersz[wiersz]][l]:8:3,' ');
-    writeln;
-  end;
+  Wypisanie (macierz, ileNiewiadomych, wektorWiersz, wektorKolumna);
   //
   writeln ('Dobra, kotles, ile iteracji?');
   read (maxIter);
@@ -477,49 +453,67 @@ begin
     for i:=0 to ileNiewiadomych-1 do
     begin
       suma:=0;
-      //modulSuma:=0;
+      modulSuma:=0;
       for j:=0 to ileNiewiadomych-1 do
       begin
         if (j<>i) then
         begin
            suma:= suma + wektorX[j]*macierz[wektorWiersz[i]][j];
-           //modulSuma:= modulSuma + Modul(wektorY[j]*macierz[wektorWiersz[i]][j]);
+           modulSuma:= modulSuma + Modul(macierz[wektorWiersz[i]][j]);
         end;
-        //if (Modul(macierz[wektorWiersz[i]][i])>modulSuma) then
-        //   warunek:=true;
+        if (Modul(1/macierz[wektorWiersz[i]][i]) < modulSuma) then
+        begin
+          writeln ('Przerwano po ',l,' iteracjach z powodu niespelnienia warunku zbieznosci');
+          Exit;
+        end;
       end;
       wektorX[i] := (macierz[wektorWiersz[i]][ileNiewiadomych]-suma)*macierz[wektorWiersz[i]][i];
-      writeln ('x',i+1,'=',wektorX[i]:8:4);
     end;
-    {for i:=0 to ileNiewiadomych-1 do
-    begin
-      wektorY[i]:=wektorX[i];
-    end;}
     l:=l+1;
-
+    writeln ('Po ',l,' iteracjach wyniki to: ');
+    for i:=0 to ileNiewiadomych-1 do
+      writeln ('x',i+1,'=',wektorX[i]:8:4);
+    if (maxIter=l) then writeln ('Przerwano z powodu spelnienia warunku maksymalnej liczby iteracji');
   until (maxIter=l);
 end;
 
 procedure CzytajDane (var macierzAB : tMacierz; var ileNiewiadomych : word; var eps : double);
 var
   i, j : word;
+  wektorIndeks : tWektorIndeks;
 begin
+
   write ('Podaj ile chcesz niewiadomych: ');
   read (ileNiewiadomych);
 
-  //write ('Podaj jakiej oczekujesz dokladnosci (bliskosc do zera): ');
-  //read (eps);
   eps:=1e-12;
   //+1 kolumn, poniewaz dopisujemy do macierzy kolumne wyrazow wolnych
   //SetLength oprocz ustawienia wymiarow, wypelnia wszystkie komorki tabeli zerami
   SetLength (macierzAB, ileNiewiadomych, ileNiewiadomych+1);
+  SetLength (wektorIndeks,ileNiewiadomych+1);
+  for i:=0 to ileNiewiadomych do
+  begin
+    wektorIndeks[i]:=i;
+  end;
   //numerowanie indeksow jest od 0, wiec liczymy do ile-1
   //odczytywanie zawartosci macierzy, tzn. parametrow
+  writeln ('Podaj teraz wspolczynniki przy niewiadomych (macierz A)');
   for i:=0 to ileNiewiadomych-1 do
   begin
-    for j:=0 to ileNiewiadomych do
-    read (macierzAB[i][j]);
+    for j:=0 to ileNiewiadomych-1 do
+    begin
+      write ('x',j+1,i+1,': ');
+      readln (macierzAB[j][i]);
+    end;
   end;
+  writeln ('Podaj teraz wyrazy wolne (wektor B)');
+  for i:=0 to ileNiewiadomych-1 do
+  begin
+    write ('b',i+1,': ');
+    readln (macierzAB[i][ileNiewiadomych]);
+  end;
+  writeln ('Podana przez Ciebie macierz wyglada tak: ');
+  Wypisanie (macierzAB, ileNiewiadomych, wektorIndeks, wektorIndeks);
 end;
 
 procedure GotoweDane (var macierzAB : tMacierz; var ileNiewiadomych : word; var eps : double);
