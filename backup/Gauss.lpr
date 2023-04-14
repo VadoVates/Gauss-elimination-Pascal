@@ -451,17 +451,16 @@ begin
   for i:=0 to ileNiewiadomych-1 do
   begin
     macierz[wektorWiersz[i]][i] := 1/macierz[wektorWiersz[i]][i];
-    macierz[wektorWiersz[i]][ileNiewiadomych] := macierz[wektorWiersz[i]][ileNiewiadomych] * macierz[wektorWiersz[i]][i];
-    wektorY[i]:= macierz[wektorWiersz[i]][ileNiewiadomych];
+    //macierz[wektorWiersz[i]][ileNiewiadomych] := macierz[wektorWiersz[i]][ileNiewiadomych] * macierz[wektorWiersz[i]][i];
+    //wektorY[i]:= macierz[wektorWiersz[i]][ileNiewiadomych];
   end;
-  j:=0;
-  for i:=0 to ileNiewiadomych-1 do
+  {for i:=0 to ileNiewiadomych-1 do
   begin
     for j:=0 to ileNiewiadomych-1 do
     begin
-      if (j<>i) then macierz[wektorWiersz[i]][j]:=-macierz[wektorWiersz[i]][j]*macierz[wektorWiersz[i]][i];
+      if (j<>i) then macierz[wektorWiersz[i]][j]:=macierz[wektorWiersz[i]][j]*macierz[wektorWiersz[i]][i];
     end;
-  end;
+  end;}
   //kontrolne wypisanie
   writeln ('Macierz AB:');
   for wiersz:=0 to ileNiewiadomych-1 do
@@ -474,36 +473,31 @@ begin
   writeln ('Dobra, kotles, ile iteracji?');
   read (maxIter);
   l:=0;
-  warunek:=false;
   repeat
     for i:=0 to ileNiewiadomych-1 do
     begin
       suma:=0;
-      modulSuma:=0;
+      //modulSuma:=0;
       for j:=0 to ileNiewiadomych-1 do
       begin
         if (j<>i) then
         begin
-           suma:= suma + wektorY[j]*macierz[wektorWiersz[i]][j];
-           modulSuma:= modulSuma + Modul(wektorY[j]*macierz[wektorWiersz[i]][j]);
+           suma:= suma + wektorX[j]*macierz[wektorWiersz[i]][j];
+           //modulSuma:= modulSuma + Modul(wektorY[j]*macierz[wektorWiersz[i]][j]);
         end;
-        if (Modul(macierz[wektorWiersz[i]][i])>modulSuma) then
-           warunek:=true;
+        //if (Modul(macierz[wektorWiersz[i]][i])>modulSuma) then
+        //   warunek:=true;
       end;
-      wektorX[i]:=macierz[wektorWiersz[i]][ileNiewiadomych]+suma;
+      wektorX[i] := (macierz[wektorWiersz[i]][ileNiewiadomych]-suma)*macierz[wektorWiersz[i]][i];
       writeln ('x',i+1,'=',wektorX[i]:8:4);
     end;
-    for i:=0 to ileNiewiadomych-1 do
+    {for i:=0 to ileNiewiadomych-1 do
     begin
       wektorY[i]:=wektorX[i];
-    end;
+    end;}
     l:=l+1;
-    if ((warunek) or (maxIter=l)) then
-    begin
-      if (warunek) then writeln ('Osiagnieto koncowy warunek zbieznosci');
-      if (maxIter=1) then writeln ('Osiagnieto koncowy warunek ilosci iteracji');
-    end;
-  until (warunek) or (maxIter=l);
+
+  until (maxIter=l);
 end;
 
 procedure CzytajDane (var macierzAB : tMacierz; var ileNiewiadomych : word; var eps : double);

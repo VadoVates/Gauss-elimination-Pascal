@@ -9,9 +9,9 @@
         <Filename Value="Gauss.lpr"/>
         <IsPartOfProject Value="True"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="473"/>
-        <CursorPos X="64" Y="490"/>
-        <UsageCount Value="85"/>
+        <TopLine Value="452"/>
+        <CursorPos X="51" Y="461"/>
+        <UsageCount Value="86"/>
         <Loaded Value="True"/>
       </Unit>
     </Units>
