@@ -136,6 +136,11 @@ begin
     j:=wektorKolumna[kolumna];
     wektorKolumna[kolumna]:=wektorKolumna[i];
     wektorKolumna[i]:=j;
+    if (kolumna<>i) then
+    begin
+      writeln ('Zamiana kolumny: ',wektorKolumna[kolumna]+1,' <-> ',wektorKolumna[i]+1);
+      Wypisanie (macierz, ileNiewiadomych, wektorWiersz,wektorKolumna);
+    end;
     //sprawdzenie czy na przekatnej dalej jest jakies zero, zeby nie dzielic przez zero
     for j:=i+1 to ileNiewiadomych-1 do
     begin
@@ -227,6 +232,11 @@ begin
     j:=wektorWiersz[wiersz];
     wektorWiersz[wiersz]:=wektorWiersz[i];
     wektorWiersz[i]:=j;
+    if (wiersz<>i) then
+    begin
+      writeln ('Zamiana wierszy: ',wektorWiersz[wiersz]+1,' <-> ',wektorWiersz[i]+1);
+      Wypisanie (macierz, ileNiewiadomych, wektorWiersz,wektorKolumna);
+    end;
     //sprawdzenie czy na przekatnej dalej jest jakies zero, zeby nie dzielic przez zero
     for j:=i+1 to ileNiewiadomych-1 do
     begin
@@ -323,6 +333,11 @@ begin
     j:=wektorWiersz[wiersz];
     wektorWiersz[wiersz]:=wektorWiersz[i];
     wektorWiersz[i]:=j;
+    if (wiersz<>i) then
+    begin
+      writeln ('Zamiana wierszy: ',wektorWiersz[wiersz]+1,' <-> ',wektorWiersz[i]+1);
+      Wypisanie (macierz, ileNiewiadomych, wektorWiersz,wektorKolumna);
+    end;
     //sprawdzenie czy na przekatnej dalej jest jakies zero, zeby nie dzielic przez zero
     for j:=i+1 to ileNiewiadomych-1 do
     begin
@@ -429,6 +444,11 @@ begin
     j:=wektorWiersz[wiersz];
     wektorWiersz[wiersz]:=wektorWiersz[i];
     wektorWiersz[i]:=j;
+    if (wiersz<>i) then
+    begin
+      writeln ('Zamiana wierszy: ',wektorWiersz[wiersz]+1,' <-> ',wektorWiersz[i]+1);
+      Wypisanie (macierz, ileNiewiadomych, wektorWiersz,wektorKolumna);
+    end;
     //sprawdzenie czy na przekatnej dalej jest jakies zero, zeby nie dzielic przez zero
     for j:=i+1 to ileNiewiadomych-1 do
     begin
@@ -443,10 +463,7 @@ begin
   begin
     macierz[wektorWiersz[i]][i] := 1/macierz[wektorWiersz[i]][i];
   end;
-  //kontrolne wypisanie
-  Wypisanie (macierz, ileNiewiadomych, wektorWiersz, wektorKolumna);
-  //
-  writeln ('Dobra, kotles, ile iteracji?');
+  writeln ('Ile iteracji?');
   read (maxIter);
   l:=0;
   repeat
@@ -519,7 +536,10 @@ end;
 procedure GotoweDane (var macierzAB : tMacierz; var ileNiewiadomych : word; var eps : double);
 var
   i : word;
+  wektorIndeks : array [0..4] of word;
 begin
+  for i:=0 to 4 do
+      wektorIndeks[i]:=i;
   write ('Podaj czy wolisz dane latwiejsze [1], czy trudniejsze [2] (z zerami na przekatnej), czy [3]: ');
   read (i);
   ileNiewiadomych:=4;
@@ -605,6 +625,8 @@ begin
       end;
     end;
   end;
+  writeln ('Podana przez Ciebie macierz wyglada tak: ');
+  Wypisanie (macierzAB, ileNiewiadomych, wektorIndeks, wektorIndeks);
 end;
 
 procedure Implementacja;
